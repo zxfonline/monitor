@@ -1,0 +1,48 @@
+###注意： 使用超级管理员启动命令行工具
+
+#删除服务
+sc delete nats-cluster1.1
+sc delete nats-cluster1.2
+sc delete nats-cluster1.3
+
+#添加nats-server集群1服务
+sc create nats-cluster1.1 binPath="d:/nats-server/nats-server.exe -c d:/nats-server/c1js11.conf"
+sc create nats-cluster1.2 binPath="d:/nats-server/nats-server.exe -c d:/nats-server/c1js12.conf"
+sc create nats-cluster1.3 binPath="d:/nats-server/nats-server.exe -c d:/nats-server/c1js13.conf"
+
+#设置服务为自动启动
+sc config nats-cluster1.1 start=auto
+sc config nats-cluster1.2 start=auto
+sc config nats-cluster1.3 start=auto
+
+#关闭服务
+sc stop nats-cluster1.1
+sc stop nats-cluster1.2
+sc stop nats-cluster1.3
+
+#启动服务
+sc start nats-cluster1.1
+sc start nats-cluster1.2
+sc start nats-cluster1.3
+
+#输出的数据和日志文件在 C:\Windows\System32 目录（如果没有就在c盘 查找c1js11.log 文件）
+
+##重新加载集群节点配置文件
+nats-server.exe --signal reload=nats-cluster1.1
+nats-server.exe --signal reload=nats-cluster1.2
+nats-server.exe --signal reload=nats-cluster1.3
+
+##安全关闭集群节点
+nats-server.exe --signal stop=nats-cluster1.1
+nats-server.exe --signal stop=nats-cluster1.2
+nats-server.exe --signal stop=nats-cluster1.3
+
+##nats-server signal命令
+#Signal 	Result
+#SIGKILL	Kills the process immediately
+#SIGQUIT	Kills the process immediately and performs a core dump
+#SIGINT 	Stops the server gracefully
+#SIGTERM	Stops the server gracefully
+#SIGUSR1	Reopens the log file for log rotation
+#SIGHUP 	Reloads server configuration file
+#SIGUSR2	Stops the server after evicting all clients (lame duck mode)
