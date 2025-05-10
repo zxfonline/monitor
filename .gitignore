@@ -1,4 +1,3 @@
-nats-server/nats-server.exe
 nats-server/*.log
 nats-server/*.ports
 nats-server/c1js11
